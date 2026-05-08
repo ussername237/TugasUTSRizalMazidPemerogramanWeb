@@ -1,66 +1,105 @@
-<?php
-include 'koneksi.php';
-
-$data = mysqli_query($conn, "SELECT * FROM mahasiswa");
-?>
-
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-    <title>Data Mahasiswa</title>
-    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Foto</title>
+
+    <style>
+        body{
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        .container{
+            width: 400px;
+            margin: 50px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+
+        h2{
+            text-align: center;
+        }
+
+        input{
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        button{
+            width: 100%;
+            padding: 10px;
+            margin-top: 15px;
+            background-color: blue;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        img{
+            width: 100%;
+            margin-top: 15px;
+            border-radius: 10px;
+            display: none;
+        }
+    </style>
 </head>
 <body>
 
 <div class="container">
 
-<h2>Data Mahasiswa</h2>
+    <h2>Form Upload Foto</h2>
 
-<a href="form.php" class="tambah">+ Tambah Data</a>
+    <form onsubmit="return validasiForm()">
 
-<table>
-    <tr>
-        <th>No</th>
-        <th>Foto</th>
-        <th>NIM</th>
-        <th>Nama Lengkap</th>
-        <th>Jurusan</th>
-        <th>Aksi</th>
-    </tr>
+        <input type="text" id="nama" placeholder="Masukkan Nama">
 
-<?php
-$no = 1;
+        <input type="file" id="foto" accept="image/*">
 
-while($row = mysqli_fetch_assoc($data)){
-?>
+        <button type="submit">Simpan</button>
 
-<tr>
-    <td><?= $no++; ?></td>
+    </form>
 
-    <td>
-        <img src="uploads/<?= $row['foto']; ?>" width="80">
-    </td>
-
-    <td><?= $row['nim']; ?></td>
-    <td><?= $row['nama_lengkap']; ?></td>
-    <td><?= $row['jurusan']; ?></td>
-
-    <td>
-        <a href="form.php?id=<?= $row['id']; ?>" class="edit">Edit</a>
-
-        <a href="hapus.php?id=<?= $row['id']; ?>"
-           class="hapus"
-           onclick="return confirm('Yakin ingin menghapus data ini?')">
-           Hapus
-        </a>
-    </td>
-</tr>
-
-<?php } ?>
-
-</table>
+    <img id="preview">
 
 </div>
+
+<script>
+
+function validasiForm(){
+
+    let nama = document.getElementById("nama").value;
+    let foto = document.getElementById("foto").value;
+
+    if(nama == ""){
+        alert("Nama harus diisi!");
+        return false;
+    }
+
+    if(foto == ""){
+        alert("Foto harus dipilih!");
+        return false;
+    }
+
+    alert("Data berhasil disimpan!");
+    return true;
+}
+
+document.getElementById("foto").addEventListener("change", function(event){
+
+    let preview = document.getElementById("preview");
+
+    preview.src = URL.createObjectURL(event.target.files[0]);
+
+    preview.style.display = "block";
+
+});
+
+</script>
 
 </body>
 </html>
